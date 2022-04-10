@@ -8,27 +8,52 @@
 #print(second_month)
 #print(third_month)
 #print(final_output)
-loan_principal = int(input("Enter the loan principal:"))
+import math
+
 print('''What do you want to calculate?
-type "m" - for number of monthly payments,
-type "p" - for the monthly payment:''')
+type "n" for number of monthly payments,
+type "a" for annuity monthly payment amount,
+type "p" for loan principal:''')
 calculate = input()
-if calculate == "m":
+if calculate == "a":
+    loan_principal = int(input("Enter the loan principal:"))
+    numbers_months = int(input("Enter the number of periods:"))
+    loan_interest = float(input("Enter the loan interest:"))
+    i = loan_interest / 12 / 100
+    a = math.ceil(loan_principal * (i * ((1 + i) ** numbers_months)) / (((1 + i) ** numbers_months) - 1))
+    print(f"Your monthly payment = {a}!")
+if calculate == "n":
+    print("Enter the loan principal:")
+    loan_principal = int(input())
     print("Enter the monthly payment:")
     monthly_payment = int(input())
-    numbers_months = loan_principal / monthly_payment
-    if numbers_months == 1:
-        print("It will take,", round(numbers_months), "month to repay the loan")
-    else:
-        print("It will take,", round(numbers_months), "months to repay the loan")
-elif calculate == "p":
-    print("Enter the number of months:")
-    numbers_months = int(input())
-    payment = round(loan_principal / numbers_months)
-    if loan_principal % numbers_months == 0:
-        print("Your monthly payment =", round(payment))
-    elif loan_principal % numbers_months != 0:
-        lastpayment = loan_principal - (numbers_months - 1) * payment
-        print("Your monthly payment =", round(payment + 1), "and the last payment =", round(lastpayment - numbers_months + 1), ".")
+    print("Enter the loan interest:")
+    loan_interest = float(input())
+    i = loan_interest / 12 / 100
+    n = math.ceil(math.log((monthly_payment / (monthly_payment - i * loan_principal)), (1 + i)))
+    year_qlt = n // 12
+    month_qlt = n % 12
+    if year_qlt < 1:
+        if month_qlt <= 1:
+            print(f"It will take {month_qlt} month to repay this loan!")
+        else:
+            print(f"It will take {month_qlt} months to repay this loan!")
+    elif year_qlt >= 1:
+        if month_qlt == 0:
+            print(f"It will take {year_qlt} years to repay this loan!")
+        elif month_qlt == 1:
+            print(f"It will take {year_qlt} years and 1 month month to repay this loan!")
+        elif month_qlt > 1:
+            print(f"It will take {year_qlt} years and {month_qlt} months to repay this loan!")
 
+elif calculate == "p":
+    print("Enter the annuity payment:")
+    a = float(input())
+    print("Enter the number of periods:")
+    numbers_months = int(input())
+    print("Enter the loan interest:")
+    loan_interest = float(input())
+    i = loan_interest / 12 / 100
+    p = a / ((i * math.pow((1 + i), numbers_months) / ((1 + i) ** numbers_months - 1)))
+    print(p)
 
